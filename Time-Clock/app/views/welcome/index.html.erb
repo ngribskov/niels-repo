@@ -1,0 +1,6 @@
+
+<%= react_component('Clock',
+      open: @entry.open,
+      csrf: form_authenticity_token,
+      initProject: @entry.project,
+      initDescription: @entry.description) %>

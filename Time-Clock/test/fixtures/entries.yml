@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  start: 2016-07-24 09:37:30
+  stop: 2016-07-24 09:37:30
+  project: MyString
+  description: MyString
+  open?: false
+  elapsed: 
+
+two:
+  start: 2016-07-24 09:37:30
+  stop: 2016-07-24 09:37:30
+  project: MyString
+  description: MyString
+  open?: false
+  elapsed: 
