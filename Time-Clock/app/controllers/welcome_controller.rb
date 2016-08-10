@@ -9,7 +9,7 @@ class WelcomeController < ApplicationController
     @entry.project = @entry.project || ""
     @entry.description = @entry.description || ""
     if request.xhr?
-      render json: prep_entries
+      render json: prep_entries(nil)
     end
   end
 
@@ -18,6 +18,7 @@ class WelcomeController < ApplicationController
     if status['open'] == 'true'
       entry = Entry.new
       entry.start = status['start']
+      entry.stop = ""
       entry.project = status['project']
       entry.description = status['description']
       entry.open = true
@@ -32,13 +33,24 @@ class WelcomeController < ApplicationController
       entry.save
 
     end
-    render json: prep_entries
+    render json: prep_entries(nil)
+  end
+
+  def filter
+    entries = Entry.where(project: params['project'])
+    start = params['start'].to_time || "1/1/2000".to_time
+    stop = params['stop'].to_time || params['current_time'].to_time
+    # binding.pry
+    entries = entries.reject{|s|s.start < start}
+    entries = entries.reject{|s|s.stop > stop}
+    render json: prep_entries(entries)
   end
 
   private
-  def prep_entries
-    all = Entry.all
+  def prep_entries(input)
+    all = input || Entry.all
     @@entries = []
+    id = 0
     all.each do |i|
       elapsed = i.elapsed||0
       if i.stop
@@ -46,13 +58,15 @@ class WelcomeController < ApplicationController
       else
         stoptime = ""
       end
-      out = {project: i.project,
+      out = {id: i.id,
+             project: i.project,
              start: i.start.to_time.strftime('%D %H:%M:%S'),
              stop: stoptime,
              elapsed: secs_to_string(elapsed),
              open: i.open,
              description: i.description}
       @@entries.push(out)
+      id+=1
     end
     return @@entries.reverse
   end
