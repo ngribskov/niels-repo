@@ -1,0 +1,16 @@
+<head>
+  <link href="<%=asset_path("lightbox.css")%>" rel="stylesheet">
+</head>
+<% @array_of_photos.each do |i| %>
+  <div class="photo" id="container-<%=i[3]%>" style="left:<%=i[1]%>%; top:<%=i[2]%>%;">
+    <a href="<%=asset_path("#{i[3]}.jpg")%>" data-lightbox="<%=i[3]%>" data-title="stub">
+      <img id="<%= i[3]%>" src="<%=asset_path("#{i[3]}.jpg")%>" style="transform: rotate(<%=i[0]%>deg)"/>
+    </a>
+  </div>
+  <% end%>
+  <%= react_component('Polaroid',
+        photos: @array_of_photos) %>
+
+  <!-- </body> -->
+
+<script src="<%=asset_path("lightbox.js")%>"></script>
